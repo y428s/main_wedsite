@@ -4,12 +4,8 @@ import {
   doc,
   setDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-/* 1. Firebase 配置（必须替换） */
+/* 1. Firebase 配置（必须是你的真实配置） */
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_AUTH_DOMAIN",
@@ -19,40 +15,40 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
-/* 2. 在线更新函数 */
-function updateOnline(user) {
-  if (!user) return;
+/* 2. 生成唯一用户ID（不用登录） */
+const uid = localStorage.getItem("uid") || crypto.randomUUID();
+localStorage.setItem("uid", uid);
 
-  setDoc(doc(db, "online_users", user.uid), {
-    username: user.email || "unknown",
-    page: window.location.pathname,
-    lastActive: Date.now(),
-    status: "online"
-  }, { merge: true });
+/* 3. 获取当前页面 */
+const page = window.location.pathname;
+
+/* 4. 写入在线数据 */
+async function updateOnline() {
+  try {
+    await setDoc(doc(db, "online_users", uid), {
+      username: "guest",
+      page: page,
+      lastActive: Date.now(),
+      status: "online"
+    }, { merge: true });
+  } catch (e) {
+    console.error("Firestore 写入失败:", e);
+  }
 }
 
-/* 3. 登录状态监听 */
-onAuthStateChanged(auth, (user) => {
-  if (!user) return;
+/* 5. 首次写入 */
+updateOnline();
 
-  // 立即写入一次
-  updateOnline(user);
+/* 6. 每5秒更新在线状态 */
+setInterval(() => {
+  updateOnline();
+}, 5000);
 
-  // 每 5 秒更新一次在线状态
-  setInterval(() => {
-    updateOnline(user);
-  }, 5000);
-});
-
-/* 4. 页面关闭/切换时标记（尽力而为） */
+/* 7. 页面关闭时标记离线 */
 window.addEventListener("beforeunload", async () => {
-  const user = auth.currentUser;
-  if (!user) return;
-
   try {
-    await setDoc(doc(db, "online_users", user.uid), {
+    await setDoc(doc(db, "online_users", uid), {
       status: "offline",
       lastActive: Date.now()
     }, { merge: true });
