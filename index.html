@@ -31,34 +31,6 @@
         <li>未来会不会更新纯粹看我的心情</li>
     </ul>
 </footer>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyASAC8WqQrH0kVvjFhd2D5HROaqio3ZVx4",
-  authDomain: "project-check-63622.firebaseapp.com",
-  projectId: "project-check-63622",
-  appId: "1:273888390558:web:797825a21051537eb93a8f"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const uid = localStorage.getItem("uid") || crypto.randomUUID();
-localStorage.setItem("uid", uid);
-
-async function write() {
-  await setDoc(doc(db, "online_users", uid), {
-    page: location.pathname,
-    time: Date.now(),
-    status: "online"
-  }, { merge: true });
-}
-
-write();
-setInterval(write, 5000);
-</script>
 </body>
 </html>
 <!-- made by skyyyy-->
