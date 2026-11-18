@@ -1,0 +1,246 @@
+/* ==========================================================
+   中心计算.html — landing page styles
+   Dark neon theme, matching the 文商 calculator pages
+   ========================================================== */
+
+:root{
+    --bg:#050816;
+    --bg-soft:#0b1120;
+    --card:rgba(255,255,255,0.05);
+    --line:rgba(255,255,255,0.12);
+    --text:#e8eefc;
+    --muted:#93a2c0;
+    --cyan:#00f5ff;
+    --mint:#4dffb8;
+    --pink:#ff4dff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    -webkit-text-size-adjust:100%;
+}
+
+body{
+    font-family:"PingFang SC","Microsoft JhengHei","Noto Sans SC","Hiragino Sans GB",system-ui,sans-serif;
+    min-height:100vh;
+    padding:56px 20px 40px;
+    color:var(--text);
+    line-height:1.7;
+
+    background:
+        radial-gradient(circle at 12% 8%, rgba(0,245,255,0.14), transparent 42%),
+        radial-gradient(circle at 88% 92%, rgba(255,77,255,0.10), transparent 42%),
+        linear-gradient(160deg, var(--bg), var(--bg-soft) 55%, #111827);
+
+    background-attachment:fixed;
+}
+
+/* ---------- Header ---------- */
+
+.site-header{
+    max-width:1000px;
+    margin:0 auto 40px;
+    text-align:center;
+}
+
+.eyebrow{
+    font-size:0.78rem;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    opacity:0.8;
+    margin-bottom:14px;
+}
+
+.site-header h1{
+    font-size:clamp(2rem, 5vw, 3rem);
+    line-height:1.25;
+    letter-spacing:0.04em;
+
+    background:linear-gradient(90deg, var(--cyan), var(--mint), var(--pink));
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    color:transparent;
+}
+
+.subtitle{
+    margin-top:14px;
+    color:var(--muted);
+    font-size:1rem;
+}
+
+/* ---------- Layout ---------- */
+
+main{
+    max-width:1000px;
+    margin:0 auto;
+}
+
+.intro{
+    text-align:center;
+    color:var(--muted);
+    font-size:0.98rem;
+    margin-bottom:28px;
+    padding:0 8px;
+}
+
+/* ---------- Calculator cards ---------- */
+
+.calc-grid{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:22px;
+}
+
+.calc-card{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+
+    padding:32px 28px;
+    border-radius:22px;
+    border:1px solid var(--line);
+    background:var(--card);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+
+    text-decoration:none;
+    color:inherit;
+
+    box-shadow:
+        0 0 25px rgba(0,245,255,0.10),
+        0 0 70px rgba(0,245,255,0.05);
+
+    transition:transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.calc-card::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    padding:1px;
+    background:linear-gradient(135deg, rgba(0,245,255,0.55), rgba(255,77,255,0.45));
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;
+    mask-composite:exclude;
+    opacity:0;
+    transition:opacity 0.3s ease;
+    pointer-events:none;
+}
+
+.calc-card:hover,
+.calc-card:focus-visible{
+    transform:translateY(-6px);
+    border-color:transparent;
+    box-shadow:
+        0 0 35px rgba(0,245,255,0.28),
+        0 18px 40px rgba(0,0,0,0.45);
+}
+
+.calc-card:hover::after,
+.calc-card:focus-visible::after{
+    opacity:1;
+}
+
+.calc-card:focus-visible{
+    outline:2px solid var(--cyan);
+    outline-offset:4px;
+}
+
+.tag{
+    align-self:flex-start;
+    font-size:0.75rem;
+    letter-spacing:0.18em;
+    padding:5px 12px;
+    border-radius:999px;
+    border:1px solid rgba(0,245,255,0.4);
+    color:var(--cyan);
+    background:rgba(0,245,255,0.08);
+}
+
+.calc-card h2{
+    font-size:1.55rem;
+    letter-spacing:0.02em;
+    color:#ffffff;
+}
+
+.calc-card p{
+    color:var(--muted);
+    font-size:0.94rem;
+}
+
+.go{
+    margin-top:auto;
+    padding-top:8px;
+    font-size:0.95rem;
+    font-weight:700;
+    color:var(--mint);
+    transition:transform 0.3s ease;
+}
+
+.calc-card:hover .go{
+    transform:translateX(6px);
+}
+
+/* ---------- Footer ---------- */
+
+footer{
+    max-width:1000px;
+    margin:48px auto 0;
+    padding-top:24px;
+    border-top:1px solid rgba(255,255,255,0.08);
+    text-align:center;
+    color:var(--muted);
+    font-size:0.86rem;
+}
+
+footer p + p{
+    margin-top:6px;
+}
+
+.credit{
+    margin-top:18px;
+    font-size:0.78rem;
+    letter-spacing:0.14em;
+    color:rgba(147,162,192,0.6);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width:720px){
+    body{
+        padding:40px 16px 32px;
+    }
+
+    .calc-grid{
+        grid-template-columns:1fr;
+    }
+
+    .calc-card{
+        padding:26px 22px;
+    }
+
+    .site-header{
+        margin-bottom:30px;
+    }
+}
+
+@media (prefers-reduced-motion:reduce){
+    *{
+        transition:none !important;
+        animation:none !important;
+    }
+}
